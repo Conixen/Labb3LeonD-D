@@ -14,7 +14,7 @@ namespace Labb3LeonD_D
 
             // Fetching all students
 
-            //using (SqlConnection connection = new SqlConnection(connectionString2)) 
+            //using (SqlConnection connection = new SqlConnection(connectionString2))
             //{
             //    connection.Open();
 
@@ -25,7 +25,7 @@ namespace Labb3LeonD_D
 
             //    using (SqlDataReader reader = command.ExecuteReader())
             //    {
-            //        for (int i = 0; i < reader.FieldCount; i++) 
+            //        for (int i = 0; i < reader.FieldCount; i++)
             //        {
             //            Console.Write(reader.GetName(i) + "\t");
             //        }
@@ -43,81 +43,107 @@ namespace Labb3LeonD_D
             //    connection.Close();
             //}
 
-            // Fetching all students from 1 class
+            //// Fetching all students from 1 class
 
-            using (SqlConnection connection = new SqlConnection(connectionString2))
-            {
-                connection.Open();
+            //using (SqlConnection connection = new SqlConnection(connectionString2))
+            //{
+            //    connection.Open();
 
-                string queryClass = "SELECT ClassID, ClassName FROM Class ";
-                SqlCommand commandClass = new SqlCommand(queryClass, connection);
+            //    string queryClass = "SELECT ClassID, ClassName FROM Class ";
+            //    SqlCommand commandClass = new SqlCommand(queryClass, connection);
 
-                SqlDataReader reader = commandClass.ExecuteReader();
+            //    SqlDataReader reader = commandClass.ExecuteReader();
 
-                List<(int ID, string Name)> allClasses = new List<(int ID, string Name)> ();
+            //    List<(int ID, string Name)> allClasses = new List<(int ID, string Name)> ();
 
-                Console.WriteLine("Välj en klass:");
-                while (reader.Read())
-                {
-                    int id = reader.GetInt32(0); 
-                    string name = reader.GetString(1); 
+            //    Console.WriteLine("Välj en klass:");
+            //    while (reader.Read())
+            //    {
+            //        int id = reader.GetInt32(0); 
+            //        string name = reader.GetString(1); 
 
-                    allClasses.Add((id, name));
-                    Console.WriteLine($"{id}: {name}");
-                }
-                reader.Close();
-                Console.Write("Välj vilken klass: ");
-                if (int.TryParse(Console.ReadLine(), out int classId))
-                {
-                    // Hämta elever i vald klass
-                    string queryStudents = "SELECT FirstName, LastName FROM Student WHERE ClassID = @ClassId";
-                    SqlCommand cmdStudents = new SqlCommand(queryStudents, connection);
-                    cmdStudents.Parameters.AddWithValue("@ClassId", classId);
+            //        allClasses.Add((id, name));
+            //        Console.WriteLine($"{id}: {name}");
+            //    }
+            //    reader.Close();
+            //    Console.Write("Välj vilken klass: ");
+            //    if (int.TryParse(Console.ReadLine(), out int classId))
+            //    {
+            //        // Hämta elever i vald klass
+            //        string queryStudents = "SELECT FirstName, LastName FROM Student WHERE ClassID = @ClassId";
+            //        SqlCommand cmdStudents = new SqlCommand(queryStudents, connection);
+            //        cmdStudents.Parameters.AddWithValue("@ClassId", classId);
 
-                    SqlDataReader readerStudents = cmdStudents.ExecuteReader();
+            //        SqlDataReader readerStudents = cmdStudents.ExecuteReader();
 
-                    Console.WriteLine("\nElever i vald klass:");
-                    bool foundStudents = false;
+            //        Console.WriteLine("\nElever i vald klass:");
+            //        bool foundStudents = false;
 
-                    while (readerStudents.Read())
-                    {
-                        foundStudents = true;
-                        Console.WriteLine($"- {readerStudents.GetString(0)} {readerStudents.GetString(1)}");
-                    }
+            //        while (readerStudents.Read())
+            //        {
+            //            foundStudents = true;
+            //            Console.WriteLine($"- {readerStudents.GetString(0)} {readerStudents.GetString(1)}");
+            //        }
 
-                    if (!foundStudents)
-                    {
-                        Console.WriteLine("Inga elever hittades i denna klass.");
-                    }
+            //        if (!foundStudents)
+            //        {
+            //            Console.WriteLine("Inga elever hittades i denna klass.");
+            //        }
 
-                    readerStudents.Close();
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltigt klass-ID.");
-                }
+            //        readerStudents.Close();
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Ogiltigt klass-ID.");
+            //    }
 
-                connection.Close();
-            }
+            //    connection.Close();
+            //}
 
 
             // Add more employe
 
-            //using (SqlConnection connection = new SqlConnection(connectionString2)) 
-            //{
-            //    string queryAdd = @"INSERT INTO EMPLOYE (EmployeName, RollID) 
-            //                        VALUES (@EmployeName, @RollID)";
+            using (SqlConnection connection = new SqlConnection(connectionString2))
+            {
+                string queryAdd = @"INSERT INTO EMPLOYE (EmployeName, RollID) 
+                                    VALUES (@EmployeName, @RollID)";
 
-            //    using (SqlCommand commandAdd = new SqlCommand(queryAdd, connection)) 
-            //    {
-            //        commandAdd.Parameters.AddWithValue("@EmployeName", "Bo Boström");
-            //        commandAdd.Parameters.AddWithValue("@RollID", "5");
+                using (SqlCommand commandAdd = new SqlCommand(queryAdd, connection))
+                {
+                    commandAdd.Parameters.AddWithValue("@EmployeName", "Ström Boström");
+                    commandAdd.Parameters.AddWithValue("@RollID", "4");
 
-            //        connection.Open();
-            //        var rowsAffected = commandAdd.ExecuteNonQuery();
-            //        Console.WriteLine(rowsAffected);
-            //    }
-            //}
+                    connection.Open();
+                    var rowsAffected = commandAdd.ExecuteNonQuery();
+                    Console.WriteLine(rowsAffected);
+
+                }
+                
+                string queryEmploye = "SELECT * FROM Employe";
+            
+                SqlCommand command2 = new SqlCommand(queryEmploye, connection);
+
+                using (SqlDataReader reader2 = command2.ExecuteReader())
+                {
+                    for (int i = 0; i < reader2.FieldCount; i++)
+                    {
+                        Console.Write(reader2.GetName(i) + "\t");
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    while (reader2.Read())
+                    {
+                        for (int i = 0; i < reader2.FieldCount; i++)
+                        {
+                            Console.Write(reader2[i].ToString() + "\t\t");
+                        }
+                        Console.WriteLine();
+                    }
+                }
+                //string queryEmploye = "SELECT EmployeName, RollID FROM Employe";
+
+            }
+
             // Fix comand thats shows the new added employe
         }
     }
